@@ -1,0 +1,77 @@
+<%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #menu {  list-style:none;  display: flex;}
+        #menu .item {   margin:0px 20px 0px 20px;}
+        #menu .item a {  font-weight: bold;   color:#0000FF;  text-decoration: none;}
+    
+        form#login {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"]#username,
+
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+    
+    <%- include('includes/navigation.ejs') %>
+<hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+        
+
+  
+    <div id="banner" style="display: flex; justify-content: center; align-items: center;  
+    height: 100vh; background-color: #fff; ">
+
+    <form id="login" onsubmit="return loginUser()">
+        <h2>Đăng nhập</h2>
+        <br />
+        <input type="text" id="username" placeholder="Tên người dùng" required>
+        <input type="password" id="password" placeholder="Mật khẩu" required>
+        <input type="submit" value="Đăng nhập">
+    </form>
+
+    <script>
+        function redirect(url) {
+            window.location.href = url;}
+
+        function loginUser() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "admin") {
+                alert("Đăng nhập thành công!");
+                redirect("file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/trangchunhanvien.html");
+                return true;
+            } else {
+                alert("Tên người dùng hoặc mật khẩu không đúng.");
+                return false;
+            }
+        }
+    </script>
+    </div>
+    <%- include('includes/end.ejs') %>

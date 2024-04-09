@@ -1,0 +1,126 @@
+    <%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      #menu {  list-style:none;  display: flex;}
+      #menu .item {   margin:0px 20px 0px 20px;}
+      #menu .item a {  font-weight: bold;   color:#0000FF;  text-decoration: none;}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+    
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-top-color: #ADD8E6;
+            border-style:solid
+        }
+    
+        h1 {
+            text-align: left ;
+        }
+    
+        form {
+            margin-top: 20px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    
+        input[type="text"]
+        input[type="email"],
+        input[type="date"],
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+    
+        input[type="submit"] {
+            margin-top: 20px;
+            margin-left: 100px;
+            width: 200px;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+
+
+<hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+    
+<%- include('includes/navigation.ejs') %>
+	<hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+        
+        
+ 
+    <div id="banner">
+        <div class="box-left">
+            <h2>
+                <span>Hồ Sơ</span>
+                
+            </h2>
+            <p>Xem thông tin hồ sơ thú cưng của bạn</p>
+            
+        </div>
+    </div>
+     
+
+
+   <div class="container">
+    <h1>Đăng ký thông tin thú cưng</h1>
+    <form action="#" method="post">
+        <label for="pet-name">Tên thú cưng:</label>
+        <input type="text" id="pet-name" name="pet-name" required style="width:400px; height: 30px">
+
+        <label for="pet-type" style="margin-top:10px">Loài:</label>
+        <input type="text" id="pet-type" name="pet-type" required style="width:400px; height: 30px">
+
+        <label for="pet-birthdate" style="margin-top:10px">Ngày sinh:</label>
+        <input type="date" id="pet-birthdate" name="pet-birthdate" required style="width:400px">
+
+        <label for="pet-health">Tình trạng sức khỏe:</label>
+        <select id="pet-health" name="pet-health" required style="height:30px">
+            <option value="healthy">Khỏe mạnh</option>
+            <option value="normal">Bình thường</option>
+            <option value="weak">Yếu</option>
+        </select>
+
+        <label for="phone-number" style="margin-top:10px">Số điện thoại:</label>
+        <input type="text" id="phone-number" name="phone-number" required pattern="[0-9]{10}" title="Số điện thoại phải gồm 10 chữ số" style="width:400px; height: 30px">
+
+
+        <label for="owners-email">Email chủ thú cưng:</label>
+        <input type="email" id="owners-email" name="owners-email" required style="height:30px; width:400px">
+
+        <input type="checkbox" id="add-to-mailing-list" name="add-to-mailing-list" value="true">
+        <br/>
+
+        <input type="submit" value="Lưu thông tin">
+    </form>
+</div>
+<%- include('includes/end.ejs') %> 

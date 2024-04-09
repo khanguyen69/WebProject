@@ -1,0 +1,37 @@
+<%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      #menu {  list-style:none;  display: flex;}
+      #menu .item {   margin:0px 20px 0px 20px;}
+      #menu .item a {  font-weight: bold;   color:#0000FF;  text-decoration: none;}
+  </style>
+</head>
+
+<body>
+
+  <hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+  <%- include('includes/navigation.ejs') %>
+  
+<hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+        <div id="banner">
+            <div class="box-left">
+                <h2>
+                    <span>Your pets</span>
+                    
+                </h2>
+                <p>Theo dõi tình hình sức khỏe thú cưng của bạn tại đây</p>
+            </div>
+            <div class="box-right">
+                <img src="assets/img_1.png" alt="">
+                <img src="assets/img_2.png" alt="">
+                <img src="assets/img_3.png" alt="">
+            </div>
+            <div class="to-bottom">
+                <a href="">
+                    <img src="assets/to_bottom.png" alt="">
+                </a>
+            </div>
+        </div>
+      
+    <script src="script.js"></script>
+    <%- include('includes/end.ejs') %>

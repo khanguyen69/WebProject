@@ -6,26 +6,48 @@ const rootDir = require('../util/path')
 
 const router = express.Router();
 
+
 router.get('/', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'index.html'));
+    res.render('index', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/',
+    });
+  });
+  router.get('/dichvuindex', (req, res, next) => {
+    res.render('dichvuindex', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/dichvuindex',
+    });
+  });
+  router.get('/tranglienhe_dkthongtin', (req, res, next) => {
+    res.render('tranglienhe_dkthongtin', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/tranglienhe_dkthongtin',
+    });
+  });
+  router.get('/trangthai', (req, res, next) => {
+    res.render('trangthai', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/trangthai',
+    });
+  });
+  router.get('/hoso', (req, res, next) => {
+    res.render('hoso', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/hoso',
+    });
+  });
+  router.get('/datlich', (req, res, next) => {
+    res.render('datlich', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/datlich',
+    });
+  });
+  router.get('/dangnhap', (req, res, next) => {
+    res.render('dangnhap', {
+      pageTitle: 'Petopia - Thiên đường cho thú cưng',
+      path: '/dangnhap',
+    });
   });
 
-router.get('/dichvuindex.html', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'dichvuindex.html'));
-  });
-router.get('/tranglienhe+dkthongtin.html', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'tranglienhe+dkthongtin.html'));
-  });
-router.get('/trangthai.html', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'trangthai.html'));
-  });
-router.get('/hoso.html', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'hoso.html'));
-  });
-router.get('/datlich.html', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'datlich.html'));
-  });
-router.get('/dangnhap.html', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'dangnhap.html'));
-  });
 module.exports = router;
