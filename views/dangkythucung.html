@@ -8,9 +8,12 @@
     <title>Petopia - Thiên đường cho thú cưng </title>
     <link rel="stylesheet" href="style.css">
     <style>
+      #menu {  list-style:none;  display: flex;}
+      #menu .item {   margin:0px 20px 0px 20px;}
+      #menu .item a {  font-weight: bold;   color:#0000FF;  text-decoration: none;}
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #fff;
             margin: 0;
             padding: 0;
         }
@@ -56,7 +59,9 @@
         }
     
         input[type="submit"] {
-            width: 100%;
+            margin-top: 20px;
+            margin-left: 100px;
+            width: 200px;
             padding: 10px;
             background-color: #4caf50;
             color: #fff;
@@ -136,34 +141,30 @@
     <h1>Đăng ký thông tin thú cưng</h1>
     <form action="#" method="post">
         <label for="pet-name">Tên thú cưng:</label>
-        <input type="text" id="pet-name" name="pet-name" required>
+        <input type="text" id="pet-name" name="pet-name" required style="width:400px; height: 30px">
 
-        <label for="pet-type">Loài:</label>
-        <input type="radio" id="dog" name="pet-type" value="dog" required>
-        <label for="dog">Chó</label>
-        <input type="radio" id="cat" name="pet-type" value="cat" required>
-        <label for="cat">Mèo</label>
-        <input type="radio" id="other" name="pet-type" value="other" required>
-        <label for="other">Khác</label>
+        <label for="pet-type" style="margin-top:10px">Loài:</label>
+        <input type="text" id="pet-type" name="pet-type" required style="width:400px; height: 30px">
 
-        <label for="pet-birthdate">Ngày sinh:</label>
-        <input type="date" id="pet-birthdate" name="pet-birthdate" required>
-
-        <label for="pet-age">Tuổi:</label>
-        <input type="number" id="pet-age" name="pet-age" required>
+        <label for="pet-birthdate" style="margin-top:10px">Ngày sinh:</label>
+        <input type="date" id="pet-birthdate" name="pet-birthdate" required style="width:400px">
 
         <label for="pet-health">Tình trạng sức khỏe:</label>
-        <select id="pet-health" name="pet-health" required>
+        <select id="pet-health" name="pet-health" required style="height:30px">
             <option value="healthy">Khỏe mạnh</option>
             <option value="normal">Bình thường</option>
             <option value="weak">Yếu</option>
         </select>
 
+        <label for="phone-number" style="margin-top:10px">Số điện thoại:</label>
+        <input type="text" id="phone-number" name="phone-number" required pattern="[0-9]{10}" title="Số điện thoại phải gồm 10 chữ số" style="width:400px; height: 30px">
+
+
         <label for="owners-email">Email chủ thú cưng:</label>
-        <input type="email" id="owners-email" name="owners-email" required>
+        <input type="email" id="owners-email" name="owners-email" required style="height:30px; width:400px">
 
         <input type="checkbox" id="add-to-mailing-list" name="add-to-mailing-list" value="true">
-        <label for="add-to-mailing-list">Gửi thông tin cho tôi</label>
+        <br/>
 
         <input type="submit" value="Lưu thông tin">
     </form>
