@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Petopia - Thiên đường cho thú cưng </title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #menu {  list-style:none;  display: flex;}
+        #menu .item {   margin:0px 20px 0px 20px;}
+        #menu .item a {  font-weight: bold;   color:#0000FF;  text-decoration: none;}
+    
+        form#login {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"]#username,
+
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+<hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+    
+        <div id="header">
+            <a href="" class="logo">
+                <img src="assets/Sweet Pa.png" alt="Logo thú cưng">
+            </a>      
+	    <div style="float: left; font-size: 50px; line-height: 50px;color: #000000;"><b><u><i>Petopia</i></u></b></div>
+            <div id="menu">
+                <div class="item" style="margin-left:120px;">
+                    <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/index.html">Trang chủ</a>
+                    </div>
+                <div class="item">
+                    <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/dichvuindex.html">Dịch vụ</a>
+                </div>
+                <div class="item">
+                    <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/lienhe+dkthongtin.html">Liên hệ</a>
+                </div>
+                <div class="item">
+                    <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/trangthai.html">Trạng thái</a>
+                </div>
+                <div class="item">
+                    <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/hoso.html">Hồ sơ</a>
+                </div>
+                <div class="item">
+                  <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/datlich.html">Đặt lịch</a>
+              </div>
+                <div class="item">
+                    <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/dangnhap.html">Đăng nhập</a>
+                </div>
+            </div>
+            <div id="actions">
+                <div class="item">
+                    <img src="" alt="">
+                </div>
+                <div class="item">
+                    <img src="assets/cart.png" alt="">
+                </div>
+            </div>
+        </div>
+	<hr style="border-color: #ADD8E6;height:2px; border-width: 10px;">
+        
+
+  
+    <div id="banner" style="display: flex; justify-content: center; align-items: center;  
+    height: 100vh; background-color: #fff; ">
+
+    <form id="login" onsubmit="return loginUser()">
+        <h2>Đăng nhập</h2>
+        <br />
+        <input type="text" id="username" placeholder="Tên người dùng" required>
+        <input type="password" id="password" placeholder="Mật khẩu" required>
+        <input type="submit" value="Đăng nhập">
+    </form>
+
+    <script>
+        function redirect(url) {
+            window.location.href = url;}
+
+        function loginUser() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "admin") {
+                alert("Đăng nhập thành công!");
+                redirect("file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/trangchunhanvien.html");
+                return true;
+            } else {
+                alert("Tên người dùng hoặc mật khẩu không đúng.");
+                return false;
+            }
+        }
+    </script>
+    </div>
+
+
+
+            <div id="footer" style="margin-top:0px;">
+            <div class="box">
+                <div class="logo">
+                    <img src="" alt="">
+                    <h1><b><i><u>Petopia</u></i></b></h1>
+                </div>
+                <p>Cung cấp dịch vụ chất lượng và an toàn cho thú cưng của bạn</p>
+            </div>
+            <div class="box">
+                <h3>NỘI DUNG</h3>
+                <ul class="quick-menu">
+                    <div class="item">
+                        <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/index.html">Trang chủ</a>
+                    </div>
+                    <div class="item">
+                        <a href="">Dịch vụ</a>
+                    </div>
+                    <div class="item">
+                        <a href="file:///C:/Users/Pham%20Cao%20Minh%20Kien/Downloads/Nhom5/tranglienhe+dkthongtin.html?name=&age=&phone=&email=">Liên hệ</a>
+                    </div>
+                    <div class="item">
+                        <a href="">Trạng thái</a>
+                    </div>
+                    <div class="item">
+                        <a href="">Hồ sơ</a>
+                    </div>
+                </ul>
+            </div>
+            <div class="box">
+                <h3>LIÊN HỆ</h3>
+                <form action="">
+                    <input type="text" placeholder="Địa chỉ email">
+                    <button>Nhận tin</button>
+                </form>
+            </div>
+        </div>
+      
+    <script src="script.js"></script>
+</body>
+
+</html>
