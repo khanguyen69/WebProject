@@ -1,6 +1,6 @@
 <?php
-// Replace 'your_password' with your actual password
-$conn = mysqli_connect('localhost', 'root', '', 'petshop1');
+// nếu gặp lỗi khi kết nối cở sơ dữ liệu hãy check đúng tên database 
+$conn = mysqli_connect('localhost', 'root', '', 'petshop1'); // database Name
 
 // Check connection
 if (!$conn) {
