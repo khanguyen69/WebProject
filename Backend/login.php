@@ -21,7 +21,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     // }
 
     // $pass = md5($pass);
-
+     // truy vấn cơ sở dữ liệu tìm xem có username hay password không
     $sql = "SELECT * FROM `admin` WHERE username = '$use' AND `password` = '$pass'";
     $use_sql = mysqli_query($conn, $sql);
 
@@ -137,7 +137,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <!-- JavaScript for password visibility toggle -->
-    <script>
+    <script> // thông báo để xem đăng nhập thành công hay đăng nhập thất bại 
         document.addEventListener('DOMContentLoaded', function() {
             var passwordInput = document.getElementById('password');
             var passwordToggleBtn = document.getElementById('show-password-toggle');
