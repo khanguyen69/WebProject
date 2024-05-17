@@ -106,7 +106,7 @@ if (isset($_POST['dangky']) &&
 <body>
     <div class="container">
         <div class="form-container">
-            <form action="register.php" method="post">
+            <form action="" method="post">
                 <legend class="text-center">Đăng Ký thông tin khách hàng</legend>
                 <div class="form-group">
                     <input type="text" name="name" id="name" class="form-control" placeholder="Họ và tên" required>
