@@ -22,9 +22,9 @@ if (isset($_POST['dangky']) &&
     $dk_sql = $stmt->execute();
 
     if ($dk_sql) {
-        echo "đăng ký tài khoản thành công";
+        echo "<h2 style=\"width:100%; color:aqua; display:flex ; text-align:center;justify-content:center; padding:4px;\">Đăng ký thông tin thành công!</h2>";
     } else {
-        echo "đăng ký tài khoản thất bại";
+         echo "<h2 style=\"width:100%; color:red; display:flex ; text-align:center;justify-content:center; padding:4px;\">Đăng ký thông tin thất bại!</h2>";
     }
 }
 ?>
