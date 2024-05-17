@@ -19,7 +19,7 @@ if (isset($_POST['dangky']) &&
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssss", $name, $date, $diachi, $phone, $email);
     $dk_sql = $stmt->execute();
-
+// kiểm tra xem là đã đăng ký thành công hay chưa 
     if ($dk_sql) {
         echo "đăng ký tài khoản thành công";
     } else {
