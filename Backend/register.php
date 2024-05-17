@@ -1,4 +1,5 @@
 <?php
+// trang này dùng để load thông tin khi khách hàng nhấn nút đăng ký thông tin 
 ob_start();
 include_once 'ketnoi.php';
 if (isset($_POST['dangky']) &&
