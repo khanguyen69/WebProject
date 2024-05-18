@@ -21,8 +21,8 @@ if (isset($_SESSION['login']['username']) && isset($_POST['checkout'])) {
 
     // File content generation
     $filename = 'order_details.txt';
-    $fileContent = " \n\t\tExpensix Store - Vũ Châu\n";
-    $fileContent .= "Địa chỉ: Phố Phan Đình Giót - Phương Liệt - Thanh Xuân - TP.Hà Nội\n";
+    $fileContent = " \n\t\tExpensix Store - Minh Kiên\n";
+    $fileContent .= "TP HCM\n";
     $fileContent .= "\nThông Tin Đơn Hàng\n";
     $fileContent .= "-----------------------------------------------------------------------------\n";
 
