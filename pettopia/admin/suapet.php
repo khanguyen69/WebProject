@@ -3,7 +3,7 @@ include 'header.php';
 require_once 'connect.php';
 require_once 'uploadfiles.php';
 
-$id = !empty($_GET['Proid']) ? (int)$_GET['Proid'] : 0;
+$id = !empty($_GET['IDpet']) ? (int)$_GET['IDpet'] : 0;
 $result = mysqli_query($conn, "SELECT p.IDpet, p.Pet_type, p.pet_name, p.pet_img, p.PhoneNumber_owner, p.IDCustomer 
                     FROM pet p WHERE p.IDpet = $id");
 $rowPet = mysqli_fetch_assoc($result);

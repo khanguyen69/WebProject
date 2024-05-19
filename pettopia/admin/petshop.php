@@ -50,7 +50,7 @@ $pet = mysqli_query($conn, $sql);
 </style>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Danh sách thú cưng</h3>
+        <h3 class="panel-title">Danh sách sản phẩm</h3>
     </div>
     <div class="panel-body">
         <form method="POST" action="">
@@ -59,7 +59,7 @@ $pet = mysqli_query($conn, $sql);
                 <input type="text" name="search_term" id="search_term" class="form-control" placeholder="Nhập tên hoặc số điện thoại hoặc email">
             </div>
             <button type="submit" name="search_customer" class="btn btn-primary">Tìm kiếm</button>
-            <th><a href="/pettopia/admin/thempet.php" class="btn btn-primary btn-sm">Thêm thú cưng</a></th>
+            <th><a href="thempet.php" class="btn btn-primary btn-sm">Thêm thú cưng</a></th>
         </form>
     </div>
     <?php
@@ -112,13 +112,13 @@ $pet = mysqli_query($conn, $sql);
                         <td><?php echo $row['IDpet']; ?></td>
                         <td><?php echo $row['Pet_type']; ?></td>
                         <td><?php echo $row['pet_name']; ?></td>
-                        <td><?php echo "<img width=\"100px\" height=\"auto\" src=\"/shop/uploads/" . $row["pet_img"] . "\" alt=\"" . $row["pet_name"] . "\">" ?></td>
+                        <td><?php echo "<img width=\"100px\" height=\"auto\" src=\"/pettopia/uploads/" . $row["pet_img"] . "\" alt=\"" . $row["pet_name"] . "\">" ?></td>
                         <td><?php echo $row['PhoneNumber_owner']; ?></td>
                         <td><?php echo $row['IDCustomer']; ?></td>
                        
                         <td>
-                            <a href="/pettopia/admin/suapet.php?Proid=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-primary">Sửa</a>
-                            <a href="/pettopia/admin/xoapet.php?Proid=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thú cưng này không?')">Xóa</a>
+                            <a href="suapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-primary">Sửa</a>
+                            <a href="xoapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thú cưng này không?')">Xóa</a>
                         </td>
                     </tr>
                 <?php }; ?>
