@@ -1,1 +1,1 @@
-TRang cua admin
+Admin page, used for managing pets.
