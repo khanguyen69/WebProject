@@ -50,7 +50,7 @@ $pet = mysqli_query($conn, $sql);
 </style>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Danh sách sản phẩm</h3>
+        <h3 class="panel-title">Danh sách thú cưng</h3>
     </div>
     <div class="panel-body">
         <form method="POST" action="">
