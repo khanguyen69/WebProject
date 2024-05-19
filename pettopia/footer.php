@@ -25,7 +25,7 @@
             font-size: 20px;
         }
         .p {
-            font-size: 50px;
+            font-size: 20px;
             font-weight: bold;
         }
         .it{
@@ -39,12 +39,11 @@
 <body>
     <div class="trangcuoi">
         <div class="footer">
-            <h1>Cung cấp dịch vụ chất lượng </h1>
-            <h1>và an toàn cho thú cưng của bạn</h1>
-            <p1>Điện thoại: (028) 372 51993, Ext: 112.</p1>
-            <br/>
-            <p1>Địa chỉ: TP Thủ Đức</p1>
-            <p><span class="p"><i><u>Petopia</u></i></span></p>
+            <h1>Designer website</h1>
+            <h1>Vũ Châu</h1>
+            <p1>Địa chỉ: TP.Hà Nội</p1>
+            <p>Hotlline: 0336091630</p>
+            <p><span class="p">Web bán hàng</span></p>
         </div>
     </div>
 </body>
