@@ -1,1 +1,1 @@
-<?php require_once 'sanpham.php'?>
+<?php require_once 'main.php'?>

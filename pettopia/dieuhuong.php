@@ -120,9 +120,9 @@ $cart = (isset($_SESSION['cart'])) ? $_SESSION['cart'] : [];
             <script>
             function checkAndRedirect() {
                 <?php if (isset($_SESSION['admin']['username'])) { ?>
-                    window.location.href = 'backend/index.php';
+                    window.location.href = 'admin/index.php';
                 <?php } else { ?>
-                    window.location.href = 'backend/login.php';
+                    window.location.href = 'admin/login.php';
                 <?php } ?>
             }
             </script>
@@ -133,7 +133,7 @@ $cart = (isset($_SESSION['cart'])) ? $_SESSION['cart'] : [];
                     <a href=\"logout.php\"><i class=\"fa-regular fa-right-from-bracket\"></i> Đăng xuất</a>";
                     
                 } else {
-                    echo "Đăng nhập <br>  <a href=\"backend/login.php\"><i class=\"fa-solid fa-hippo\" style=\"color:black;\"></i> Tại đây</a>";
+                    echo "Đăng nhập <br>  <a href=\"admin/login.php\"><i class=\"fa-solid fa-hippo\" style=\"color:black;\"></i> Tại đây</a>";
                 }
                 ?>
              <br>
