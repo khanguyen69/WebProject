@@ -3,6 +3,7 @@ include 'dieuhuong.php';
 require_once 'ketnoi.php';
 
 
+
 // Process search form submission
 if(isset($_POST['search_customer'])) {
     $search_term = mysqli_real_escape_string($conn, $_POST['search_term']);
@@ -112,7 +113,7 @@ $pet = mysqli_query($conn, $sql);
                         <td><?php echo $row['IDpet']; ?></td>
                         <td><?php echo $row['Pet_type']; ?></td>
                         <td><?php echo $row['pet_name']; ?></td>
-                        <td><?php echo "<img width=\"100px\" height=\"auto\" src=\"/shop/uploads/" . $row["pet_img"] . "\" alt=\"" . $row["pet_name"] . "\">" ?></td>
+                        <td><?php echo "<img width=\"100px\" height=\"auto\" src=\"uploads/" . $row["pet_img"] . "\" alt=\"" . $row["pet_name"] . "\">" ?></td>
                         <!-- <td><?php echo $row['PhoneNumber_owner']; ?></td> -->
                         <td><?php echo $row['IDCustomer'] . ' - ' . $row['Name_customer']; ?></td>
 
