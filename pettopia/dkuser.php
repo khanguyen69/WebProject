@@ -22,9 +22,17 @@ if (isset($_POST['dangky']) &&
     $dk_sql = $stmt->execute();
 
     if ($dk_sql) {
-        echo "<h2 style=\"width:100%; color:aqua; display:flex ; text-align:center;justify-content:center; padding:4px;\">Đăng ký thông tin thành công!</h2>";
+        ob_start();
+        require_once 'footer.php';
+        $footer = ob_get_clean();
+        echo "<div style='color: #00008B; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>Đăng ký thông tin thành công!</strong></div>";
+        echo "<div class='duoi'>$footer</div>";
     } else {
-        echo "<h2 style=\"width:100%; color:red; display:flex ; text-align:center;justify-content:center; padding:4px;\">Đăng ký thông tin thất bại!</h2>";
+        ob_start();
+        require_once 'footer.php';
+        $footer = ob_get_clean();
+        echo "<div style='color: red; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>Đăng ký thông tin thất bại!</strong></div>";
+        echo "<div class='duoi'>$footer</div>";
     }
 }
 ?>
