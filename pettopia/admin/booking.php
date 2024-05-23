@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Đặt phòng</title>
+    <title>Quản lý đặt hẹn</title>
     <!-- Thêm bất kỳ CSS cần thiết nào ở đây -->
     <style>
     .phan-trang {
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Danh sách tất cả các đặt phòng</h3>
+            <h3 class="panel-title">Danh sách lịch hẹn </h3>
         </div>
 
         <?php
@@ -100,10 +100,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>ID đặt phòng</th>
+                        <th>ID đặt hẹn</th>
                         <th>Thời gian đến</th>
                         <th>Số điện thoại</th>
-                        <th>Trạng thái đặt phòng</th>
+                        <th>Trạng thái </th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Thêm mới đặt phòng</h3>
+            <h3 class="panel-title">Thêm mới lịch hẹn</h3>
         </div>
         <div class="panel-body">
             <form action="" method="POST" role="form">
@@ -161,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="text" class="form-control" name="phone_number" id="phone_number">
                 </div>
                 <div class="form-group">
-                    <label for="booking_status">Trạng thái đặt phòng</label>
+                    <label for="booking_status">Trạng thái</label>
                     <select name="booking_status" id="booking_status" class="form-control">
                         <option value="Đã đến">Đã đến</option>
                         <option value="Đợi">Đợi</option>
