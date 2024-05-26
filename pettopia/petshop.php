@@ -50,6 +50,55 @@ $pet = mysqli_query($conn, $sql);
         border: 1px solid #ebebeb;
         text-decoration: none;
     }
+    .img-zoom {
+        cursor: pointer;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width: 700px) {
+        .modal-content {
+            width: 100%;
+        }
+    }
+</style>
 </style>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -100,9 +149,7 @@ $pet = mysqli_query($conn, $sql);
                     <th>Loại thú cưng</th>
                     <th>Tên thú cưng</th>
                     <th>Ảnh thú cưng</th>
-                    <!-- <th>Số điện thoại chủ</th> -->
                     <th>Tên Khách hàng</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -113,16 +160,16 @@ $pet = mysqli_query($conn, $sql);
                         <td><?php echo $row['IDpet']; ?></td>
                         <td><?php echo $row['Pet_type']; ?></td>
                         <td><?php echo $row['pet_name']; ?></td>
-                        <td><?php echo "<img width=\"100px\" height=\"auto\" src=\"uploads/" . $row["pet_img"] . "\" alt=\"" . $row["pet_name"] . "\">" ?></td>
-                        <!-- <td><?php echo $row['PhoneNumber_owner']; ?></td> -->
+                        <td>
+                            <img class="img-zoom" width="100px" height="auto" src="uploads/<?php echo $row['pet_img']; ?>" alt="<?php echo $row['pet_name']; ?>" onclick="zoomImage(this)">
+                        </td>
                         <td><?php echo $row['IDCustomer'] . ' - ' . $row['Name_customer']; ?></td>
-
-                       
-                       
                     </tr>
                 <?php }; ?>
             </tbody>
         </table>
+    <?php }else { ?>
+        <p>Không có Thú cưng nào.</p>
     <?php } ?>
     <div class="phan-trang">
             <nav aria-label="Page navigation">
@@ -142,6 +189,34 @@ $pet = mysqli_query($conn, $sql);
             </nav>
         </div>
 </div>
+<!-- Modal for displaying the enlarged image -->
+<div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="img01">
+</div>
+
+<script>
+    function zoomImage(img) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+
+        modal.style.display = "flex";
+        modalImg.src = img.src;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    // Close the modal when clicking outside of the image
+    window.onclick = function(event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 <div class="duoi">
             <?php require_once 'footer.php' ?>
         </div>
