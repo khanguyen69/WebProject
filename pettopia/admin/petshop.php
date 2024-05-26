@@ -47,10 +47,60 @@ $pet = mysqli_query($conn, $sql);
         border: 1px solid #ebebeb;
         text-decoration: none;
     }
+            /* Styles for image modal */
+            .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 60px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.9);
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    .modal-content img {
+        width: 100%;
+        height: auto;
+    }
+
+    .modal-caption {
+        text-align: center;
+        color: #ccc;
+        padding: 10px;
+        font-size: 20px;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Danh sách sản phẩm</h3>
+        <h3 class="panel-title">Danh sách Thú cưng</h3>
     </div>
     <div class="panel-body">
         <form method="POST" action="">
@@ -112,13 +162,15 @@ $pet = mysqli_query($conn, $sql);
                         <td><?php echo $row['IDpet']; ?></td>
                         <td><?php echo $row['Pet_type']; ?></td>
                         <td><?php echo $row['pet_name']; ?></td>
-                        <td><?php echo "<img width=\"100px\" height=\"auto\" src=\"/pettopia/uploads/" . $row["pet_img"] . "\" alt=\"" . $row["pet_name"] . "\">" ?></td>
+                        <td>
+                        <img src="/pettopia/uploads/<?php echo $row['pet_img']; ?>" alt="<?php echo $row['pet_name']; ?>" class="img-thumbnail" style="width: 100px; cursor: pointer;" onclick="openModal(this.src, '<?php echo $row['pet_name']; ?>')">
+                    </td>
                         <td><?php echo $row['PhoneNumber_owner']; ?></td>
                         <td><?php echo $row['IDCustomer']; ?></td>
                        
                         <td>
                             <a href="suapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-primary">Sửa</a>
-                            <a href="xoapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thú cưng này không?')">Xóa</a>
+                            <!--<a href="xoapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thú cưng này không?')">Xóa</a> -->
                         </td>
                     </tr>
                 <?php }; ?>
@@ -133,6 +185,30 @@ $pet = mysqli_query($conn, $sql);
             ?>
         </ul>
 </div>
+<div id="myModal" class="modal" onclick="closeModal(event)">
+    <span class="close" onclick="closeModal(event)">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption" class="modal-caption"></div>
+</div>
+
+<script>
+function openModal(src, caption) {
+    var modal = document.getElementById("myModal");
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    
+    modal.style.display = "block";
+    modalImg.src = src;
+    captionText.innerText = caption;
+}
+
+function closeModal(event) {
+    var modal = document.getElementById("myModal");
+    if (event.target === modal || event.target.className === 'close') {
+        modal.style.display = "none";
+    }
+}
+</script>
 <div class="duoi">
             <?php require_once 'footer.php' ?>
         </div>
