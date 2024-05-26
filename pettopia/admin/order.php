@@ -64,54 +64,53 @@ require_once 'connect.php'; ?>
     // Display pagination
     if (mysqli_num_rows($result) > 0) {
     ?>
-        <ul class="phan-trang">
-            <?php
-            for ($i = 1; $i <= $totalpage; $i++) {
-                echo "<li><a href='?page=" . $i . "'>" . $i . "</a></li>";
-            }
-            ?>
-        </ul>
 
         <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Lịch sử dịch vụ Khách hàng</h3>
-        </div>
-        <table class="table table-bordered table-hover">
-            <thead>
-
-                <tr>
-                    <th>ID giao dịch</th>
-                    <th>ID khách hàng</th>
-                    <th>ID dịch vụ</th>
-                    <th>ID thú cưng</th>
-                    <th>Thời gian giao dịch</th>
-                    <th>Tổng giá tiền</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+            <div class="panel-heading">
+                <h3 class="panel-title">Lịch sử dịch vụ Khách hàng</h3>
+            </div>
+            <table class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td><?php echo $row['IDtrans']; ?></td>
-                        <td><?php echo $row['IDCustomer']; ?></td>
-                        <td><?php echo $row['ID_service']; ?></td>
-                        <td><?php echo $row['IDpet']; ?></td>
-                        <td><?php echo $row['time_trans']; ?></td>
-                        <td><?php echo number_format($row['total_price']); ?></td>
+                        <th>ID giao dịch</th>
+                        <th>ID khách hàng</th>
+                        <th>ID dịch vụ</th>
+                        <th>ID thú cưng</th>
+                        <th>Thời gian giao dịch</th>
+                        <th>Tổng giá tiền</th>
                     </tr>
-                <?php }; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php
+                    while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                            <td><?php echo $row['IDtrans']; ?></td>
+                            <td><?php echo $row['IDCustomer']; ?></td>
+                            <td><?php echo $row['ID_service']; ?></td>
+                            <td><?php echo $row['IDpet']; ?></td>
+                            <td><?php echo $row['time_trans']; ?></td>
+                            <td><?php echo number_format($row['total_price']); ?></td>
+                        </tr>
+                    <?php }; ?>
+                </tbody>
+            </table>
+            <ul class="phan-trang">
+                <?php
+                for ($i = 1; $i <= $totalpage; $i++) {
+                    echo "<li><a href='?page=" . $i . "'>" . $i . "</a></li>";
+                }
+                ?>
+            </ul>
+        </div>
     <?php } ?>
-
+    
     <!-- Footer -->
     <footer style="height: 50px; min-height: 50px; line-height: 50px; text-align: center">
-        
     </footer>
     <div class="duoi">
-            <?php require_once 'footer.php' ?>
-        </div>
+        <?php require_once 'footer.php' ?>
+    </div>
 </body>
 
 </html>

@@ -150,7 +150,7 @@ $cart = (isset($_SESSION['cart'])) ? $_SESSION['cart'] : [];
                         <a class="nav-link" href="petshop.php">Tìm kiếm thú cưng</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="dkuser.php">Đăng ký tài khoản</a>
+                        <a class="nav-link" href="dkuser.php">Đăng ký thông tin</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="dichvu.php">Dịch vụ</a>

@@ -3,7 +3,7 @@ include 'header.php';
 require_once 'connect.php';
 
 // Xem nhận xét và đánh giá của khách hàng
-$sql = "SELECT f.IDtrans, f.IDCustomer, f.ID_service, f.point_feedback, f.comment_feedback FROM history_feedback AS f"; // Đổi bí danh bảng thành "f"
+$sql = "SELECT  f.IDCustomer, f.ID_service, f.point_feedback, f.comment_feedback FROM history_feedback AS f"; // Đổi bí danh bảng thành "f"
 $feedbacks = mysqli_query($conn, $sql); // Đổi tên biến thành $feedbacks
 
 // Lấy dịch vụ
@@ -60,7 +60,6 @@ if(isset($_POST['delete_service'])) {
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>ID giao dịch</th>
                     <th>ID khách hàng</th>
                     <th>ID dịch vụ</th>
                     <th>Điểm đánh giá</th>
@@ -72,7 +71,6 @@ if(isset($_POST['delete_service'])) {
                 while ($row = mysqli_fetch_assoc($feedbacks)) {
                 ?>
                     <tr>
-                        <td><?php echo $row['IDtrans']; ?></td>
                         <td><?php echo $row['IDCustomer']; ?></td>
                         <td><?php echo $row['ID_service']; ?></td>
                         <td><?php echo $row['point_feedback']; ?></td>
