@@ -2,11 +2,7 @@
 include 'dieuhuong.php';
 require_once 'ketnoi.php';
 
-// Function to delete a pet from the database
-function deletePet($conn, $petId) {
-    $deleted = mysqli_query($conn, "DELETE FROM pet WHERE IDpet = $petId");
-    return $deleted;
-}
+
 
 // Process search form submission
 $search_term = '';
