@@ -1,6 +1,6 @@
 <?php
 // Replace 'your_password' with your actual password
-$conn = mysqli_connect('localhost', 'root', '', 'petshop1');
+$conn = mysqli_connect('localhost', 'root', '', 'petshop');
 
 // Check connection
 if (!$conn) {
