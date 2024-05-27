@@ -1,7 +1,6 @@
 <?php
 include 'dieuhuong.php';
 require_once 'ketnoi.php';
-require_once 'uploadfiles.php';
 
 $error = '';
 if (isset($_POST['pet_name'])) {

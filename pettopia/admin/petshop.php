@@ -8,29 +8,49 @@ function deletePet($conn, $petId) {
     return $deleted;
 }
 
+// Initialize search term and current page
+$search_term = '';
+$current_page = 1;
+
 // Process search form submission
-if(isset($_POST['search_customer'])) {
+if (isset($_POST['search_customer'])) {
     $search_term = mysqli_real_escape_string($conn, $_POST['search_term']);
-    // Search query for pet name, owner name, and phone number
-    $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer FROM pet AS s WHERE s.pet_name LIKE '%$search_term%' OR s.PhoneNumber_owner LIKE '%$search_term%' OR s.IDCustomer IN (SELECT IDCustomer FROM customer WHERE Name_customer LIKE '%$search_term%')";
+    $current_page = 1; // Reset to the first page when a new search is performed
+} else {
+    // If search term exists in the query string, use it
+    if (isset($_GET['search_term'])) {
+        $search_term = mysqli_real_escape_string($conn, $_GET['search_term']);
+    }
+    // Check current page number
+    if (isset($_GET['page'])) {
+        $current_page = (int)$_GET['page'];
+    }
+}
+
+// Search query for pet name, owner name, and phone number
+if (!empty($search_term)) {
+    $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer FROM pet AS s 
+            WHERE s.pet_name LIKE '%$search_term%' 
+            OR s.PhoneNumber_owner LIKE '%$search_term%' 
+            OR s.IDCustomer IN (SELECT IDCustomer FROM customer WHERE Name_customer LIKE '%$search_term%')";
 } else {
     // Default query to fetch all pets
     $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer FROM pet AS s";
 }
+
 $pet = mysqli_query($conn, $sql);
-$rows_per_page = 10; 
+$rows_per_page = 10;
 $total_rows = mysqli_num_rows($pet);
 $total_pages = ceil($total_rows / $rows_per_page);
-$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $start_index = ($current_page - 1) * $rows_per_page;
 $sql .= " LIMIT $start_index, $rows_per_page";
 $pet = mysqli_query($conn, $sql);
 ?>
+
 <style>
     .phan-trang {
         width: 100%;
         text-align: center;
-        list-style: none;
         list-style: none;
         font-weight: bold;
         font-size: 1.5em;
@@ -47,8 +67,12 @@ $pet = mysqli_query($conn, $sql);
         border: 1px solid #ebebeb;
         text-decoration: none;
     }
-            /* Styles for image modal */
-            .modal {
+    .phan-trang a.active {
+            color: red;
+            font-weight: bold;
+        }
+    /* Styles for image modal */
+    .modal {
         display: none;
         position: fixed;
         z-index: 1;
@@ -98,49 +122,25 @@ $pet = mysqli_query($conn, $sql);
         cursor: pointer;
     }
 </style>
+
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Danh sách Thú cưng</h3>
+        <h3 class="panel-title">Danh sách thú cưng</h3>
     </div>
     <div class="panel-body">
         <form method="POST" action="">
             <div class="form-group">
                 <label for="search_term">Tìm kiếm thú cưng:</label>
-                <input type="text" name="search_term" id="search_term" class="form-control" placeholder="Nhập tên hoặc số điện thoại hoặc email">
+                <input type="text" name="search_term" id="search_term" class="form-control" placeholder="Nhập tên hoặc số điện thoại" value="<?php echo htmlspecialchars($search_term); ?>">
             </div>
             <button type="submit" name="search_customer" class="btn btn-primary">Tìm kiếm</button>
-            <th><a href="thempet.php" class="btn btn-primary btn-sm">Thêm thú cưng</a></th>
+            <a href="petshop.php" class="btn btn-danger">Hủy tìm</a>
+            <a href="thempet.php" class="btn btn-primary btn-sm">Thêm thú cưng</a>
         </form>
     </div>
     <?php
-    $page = 0;
-    if (isset($_GET["page"])) {
-        $page = $_GET["page"] - 1;
-    }
-
-    $sql = "SELECT CEIL((SELECT COUNT(*) FROM `pet`) / 6) AS 'totalpage'";
-    $result = mysqli_query($conn, $sql);
-    $totalpage = 0;
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $totalpage = $row["totalpage"];
-        }
-    }
-
-    $sql = "SELECT " . $page . " * (SELECT (SELECT COUNT(*) FROM `pet`) / (SELECT CEIL((SELECT COUNT(*) FROM `pet`) / 6))) AS 'offset'";
-    $result = mysqli_query($conn, $sql);
-    $offset = 0;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $offset = (int) $row["offset"];
-    }
-
-    $sql = "SELECT * FROM `pet` LIMIT " . $offset . ", 6";
-
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
+    if (mysqli_num_rows($pet) > 0) {
     ?>
-        
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -151,7 +151,6 @@ $pet = mysqli_query($conn, $sql);
                     <th>Số điện thoại chủ</th>
                     <th>ID Khách hàng</th>
                     <th>Thao tác</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -163,28 +162,39 @@ $pet = mysqli_query($conn, $sql);
                         <td><?php echo $row['Pet_type']; ?></td>
                         <td><?php echo $row['pet_name']; ?></td>
                         <td>
-                        <img src="/pettopia/uploads/<?php echo $row['pet_img']; ?>" alt="<?php echo $row['pet_name']; ?>" class="img-thumbnail" style="width: 100px; cursor: pointer;" onclick="openModal(this.src, '<?php echo $row['pet_name']; ?>')">
-                    </td>
+                            <img src="./uploads/<?php echo $row['pet_img']; ?>" alt="<?php echo $row['pet_name']; ?>" class="img-thumbnail" style="width: 100px; cursor: pointer;" onclick="openModal(this.src, '<?php echo $row['pet_name']; ?>')">
+                        </td>
                         <td><?php echo $row['PhoneNumber_owner']; ?></td>
                         <td><?php echo $row['IDCustomer']; ?></td>
-                       
                         <td>
-                            <a href="suapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-primary">Sửa</a>
-                            <!--<a href="xoapet.php?IDpet=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thú cưng này không?')">Xóa</a> -->
+                            <a href="suapet.php?Proid=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-primary">Sửa</a>
+                            <!-- <a href="/shop/backend/xoapet.php?Proid=<?php echo $row['IDpet']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thú cưng này không?')">Xóa</a> -->
                         </td>
                     </tr>
                 <?php }; ?>
             </tbody>
         </table>
+    <?php } else { ?>
+        <p>Không tìm thấy thú cưng nào.</p>
     <?php } ?>
     <ul class="phan-trang">
-            <?php
-            for ($i = 1; $i <= $total_pages; $i++) {
-                echo "<li><a href='?page=" . $i . "'>" . $i . "</a></li>";
-            }
-            ?>
-        </ul>
+    <?php
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $page_link = "?page=$i";
+        if (!empty($search_term)) {
+            $page_link .= "&search_term=" . urlencode($search_term);
+        }
+        if ($i == $current_page) {
+            echo "<li><a href='$page_link' class='active'>$i</a></li>";
+        } else {
+            echo "<li><a href='$page_link'>$i</a></li>";
+        }
+    }
+    ?>
+    </ul>
 </div>
+
+<!-- The Modal -->
 <div id="myModal" class="modal" onclick="closeModal(event)">
     <span class="close" onclick="closeModal(event)">&times;</span>
     <img class="modal-content" id="img01">
@@ -209,6 +219,7 @@ function closeModal(event) {
     }
 }
 </script>
+
 <div class="duoi">
-            <?php require_once 'footer.php' ?>
-        </div>
+    <?php require_once 'footer.php'; ?>
+</div>
