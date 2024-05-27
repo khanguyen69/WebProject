@@ -2,10 +2,15 @@
 include 'dieuhuong.php';
 require_once 'ketnoi.php';
 
-
+// Function to delete a pet from the database
+function deletePet($conn, $petId) {
+    $deleted = mysqli_query($conn, "DELETE FROM pet WHERE IDpet = $petId");
+    return $deleted;
+}
 
 // Process search form submission
-if(isset($_POST['search_customer'])) {
+$search_term = '';
+if (isset($_POST['search_customer'])) {
     $search_term = mysqli_real_escape_string($conn, $_POST['search_term']);
     // Search query for pet name, owner name, and phone number
     $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer, c.Name_customer 
@@ -13,28 +18,46 @@ if(isset($_POST['search_customer'])) {
             JOIN customer AS c ON s.IDCustomer = c.IDCustomer
             WHERE s.pet_name LIKE '%$search_term%' OR s.PhoneNumber_owner LIKE '%$search_term%' OR c.Name_customer LIKE '%$search_term%'";
 } else {
-    // Default query to fetch all pets
-    $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer, c.Name_customer 
-            FROM pet AS s 
-            JOIN customer AS c ON s.IDCustomer = c.IDCustomer";
+    $search_term = isset($_GET['search_term']) ? mysqli_real_escape_string($conn, $_GET['search_term']) : '';
+    if ($search_term) {
+        // Search query for pet name, owner name, and phone number
+        $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer, c.Name_customer 
+                FROM pet AS s 
+                JOIN customer AS c ON s.IDCustomer = c.IDCustomer
+                WHERE s.pet_name LIKE '%$search_term%' OR s.PhoneNumber_owner LIKE '%$search_term%' OR c.Name_customer LIKE '%$search_term%'";
+    } else {
+        // Default query to fetch all pets
+        $sql = "SELECT s.IDpet, s.pet_name, s.pet_img, s.Pet_type, s.PhoneNumber_owner, s.IDCustomer, c.Name_customer 
+                FROM pet AS s 
+                JOIN customer AS c ON s.IDCustomer = c.IDCustomer";
+    }
 }
-$pet = mysqli_query($conn, $sql);
-$records_per_page = 10;
-$total_records = mysqli_num_rows($pet);
-$total_pages = ceil($total_records / $records_per_page);
-$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-$offset = ($current_page - 1) * $records_per_page;
-$sql .= " LIMIT $offset, $records_per_page";
 
-$pet = mysqli_query($conn, $sql);
+$records_per_page = 10;
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($current_page - 1) * $records_per_page;
+
+$sql_with_limit = $sql . " LIMIT $offset, $records_per_page";
+$pet = mysqli_query($conn, $sql_with_limit);
+
+$total_records_result = mysqli_query($conn, $sql);
+$total_records = mysqli_num_rows($total_records_result);
+$total_pages = ceil($total_records / $records_per_page);
 ?>
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Petopia - Đánh giá dịch vụ</title>
+    <style>
     .phan-trang {
         width: 100%;
         display: flex;
         justify-content: center;
         text-align: center;
-        list-style: none;
         list-style: none;
         font-weight: bold;
         font-size: 1.5em;
@@ -50,6 +73,12 @@ $pet = mysqli_query($conn, $sql);
         border: 1px solid #ebebeb;
         text-decoration: none;
     }
+
+    .phan-trang a.active {
+        color: red;
+        font-weight: bold;
+    }
+
     .img-zoom {
         cursor: pointer;
     }
@@ -98,51 +127,35 @@ $pet = mysqli_query($conn, $sql);
             width: 100%;
         }
     }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #e9e9e9;
+    }
 </style>
-</style>
+
+</head>
+<body>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">Danh sách thú cưng</h3>
+        <a href="dkpet.php" style="color: lime; margin-left: 10px;"><i class="fas fa-plus-circle"></i> Thêm thú cưng của bạn vào danh sách</a>
     </div>
     <div class="panel-body">
-        <form method="POST" action="">
+        <form method="POST" action="" id="searchForm">
             <div class="form-group">
                 <label for="search_term">Tìm kiếm thú cưng:</label>
-                <input type="text" name="search_term" id="search_term" class="form-control" placeholder="Nhập tên hoặc số điện thoại hoặc email">
+                <input type="text" name="search_term" id="search_term" class="form-control" placeholder="Nhập tên hoặc số điện thoại" value="<?php echo $search_term; ?>">
             </div>
             <button type="submit" name="search_customer" class="btn btn-primary">Tìm kiếm</button>
+            <button type="button" onclick="cancelSearch()" class="btn btn-danger" style="margin-left:5px;">Hủy tìm</button>
         </form>
     </div>
-    <?php
-    $page = 0;
-    if (isset($_GET["page"])) {
-        $page = $_GET["page"] - 1;
-    }
-
-    $sql = "SELECT CEIL((SELECT COUNT(*) FROM `pet`) / 6) AS 'totalpage'";
-    $result = mysqli_query($conn, $sql);
-    $totalpage = 0;
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $totalpage = $row["totalpage"];
-        }
-    }
-
-    $sql = "SELECT " . $page . " * (SELECT (SELECT COUNT(*) FROM `pet`) / (SELECT CEIL((SELECT COUNT(*) FROM `pet`) / 6))) AS 'offset'";
-    $result = mysqli_query($conn, $sql);
-    $offset = 0;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $offset = (int) $row["offset"];
-    }
-
-    $sql = "SELECT * FROM `pet` LIMIT " . $offset . ", 6";
-
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-    ?>
-        
-        <table class="table table-bordered table-hover">
+    <?php if (mysqli_num_rows($pet) > 0) { ?>
+        <table class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
                     <th>ID thú cưng</th>
@@ -153,42 +166,44 @@ $pet = mysqli_query($conn, $sql);
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                while ($row = mysqli_fetch_assoc($pet)) {
-                ?>
+                <?php while ($row = mysqli_fetch_assoc($pet)) { ?>
                     <tr>
                         <td><?php echo $row['IDpet']; ?></td>
                         <td><?php echo $row['Pet_type']; ?></td>
                         <td><?php echo $row['pet_name']; ?></td>
                         <td>
-                            <img class="img-zoom" width="100px" height="auto" src="uploads/<?php echo $row['pet_img']; ?>" alt="<?php echo $row['pet_name']; ?>" onclick="zoomImage(this)">
+                            <img class="img-zoom" width="100px" height="auto" src="./uploads/<?php echo $row['pet_img']; ?>" alt="<?php echo $row['pet_name']; ?>" onclick="zoomImage(this)">
                         </td>
                         <td><?php echo $row['IDCustomer'] . ' - ' . $row['Name_customer']; ?></td>
                     </tr>
-                <?php }; ?>
+                <?php } ?>
             </tbody>
         </table>
-    <?php }else { ?>
-        <p>Không có Thú cưng nào.</p>
+    <?php } else { ?>
+        <p>Không tìm thấy thú cưng nào.</p>
     <?php } ?>
     <div class="phan-trang">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <?php if ($current_page > 1) : ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?php echo $current_page - 1 ?>">Trước</a></li>
-                    <?php endif; ?>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <?php if ($current_page > 1) { ?>
+                    <li class="page-item"><a class="page-link" href="?page=<?php echo $current_page - 1 ?>&search_term=<?php echo urlencode($search_term); ?>">Trước</a></li>
+                <?php } ?>
 
-                    <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                        <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>"><a class="page-link" href="?page=<?php echo $i ?>"><?php echo $i ?></a></li>
-                    <?php endfor; ?>
+                <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                    <li class="page-item <?php echo ($i == $current_page) ? 'active' : ''; ?>"><a class="page-link" href="?page=<?php echo $i ?>&search_term=<?php echo urlencode($search_term); ?>"><?php echo $i ?></a></li>
+                <?php } ?>
 
-                    <?php if ($current_page < $total_pages) : ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?php echo $current_page + 1 ?>">Sau</a></li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-        </div>
+                <?php if ($current_page < $total_pages) { ?>
+                    <li class="page-item"><a class="page-link" href="?page=<?php echo $current_page + 1 ?>&search_term=<?php echo urlencode($search_term); ?>">Sau</a></li>
+                <?php } ?>
+            </ul>
+        </nav>
+    </div>
 </div>
+<div class="duoi">
+    <?php require_once 'footer.php'; ?>
+</div>
+
 <!-- Modal for displaying the enlarged image -->
 <div id="myModal" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
@@ -209,14 +224,21 @@ $pet = mysqli_query($conn, $sql);
         modal.style.display = "none";
     }
 
-    // Close the modal when clicking outside of the image
     window.onclick = function(event) {
         var modal = document.getElementById("myModal");
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
+
+    // JavaScript to set the page to 1 after search
+    document.getElementById('searchForm').onsubmit = function() {
+        window.location.href = '?search_term=' + encodeURIComponent(document.getElementById('search_term').value) + '&page=1';
+        return false;
+    };
+    function cancelSearch() {
+        window.location.href = 'petshop.php';
+    }
 </script>
-<div class="duoi">
-            <?php require_once 'footer.php' ?>
-        </div>
+</body>
+</html>
