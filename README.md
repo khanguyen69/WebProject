@@ -29,7 +29,7 @@ Sơ lược về cách cài đặt và sử dụng:
 
 - Tải xuống và cài đặt:
   
-Ta có thể tải xampp ở link sau: https://taimienphi.vn/download-xampp-17727#showlink
+Ta có thể tải xampp ở link sau: https://taimienphi.vn/download-xampp-17727#showlink .
 Quá trình cài đặt rất đơn giản và tương tự như cài đặt bất kỳ phần mềm nào khác trên máy tính.
 
 - Chạy XAMPP:
