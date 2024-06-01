@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý thông tin thú cưng</title>
+    <style>
+        /* CSS styles */
+        body {
+            position: relative;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            position: absolute;
+            max-width: 800px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"], .form-group input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group .upload-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group .upload-btn:hover {
+            background-color: #45a049;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+
+        .save-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+
+        .add-btn {
+            background-color: #008CBA;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .add-btn:hover {
+            background-color: #007ea7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Thông tin thú cưng</h2>
+            <div class="form-group">
+                <label for="petCode">Mã thú cưng:</label>
+                <input type="text" class="pet-code">
+            </div>
+            <div class="form-group">
+                <label for="petType">Loại thú cưng:</label>
+                <input type="text" class="pet-type">
+            </div>
+            <div class="form-group">
+                <label for="petNickname">Nickname:</label>
+                <input type="text" class="pet-nickname">
+            </div>
+            <div class="form-group">
+                <label for="petCharacteristics">Đặc điểm nhận biết:</label>
+                <input type="text" class="pet-characteristics">
+            </div>
+            <div class="form-group">
+                <label for="petImage">Hình ảnh:</label>
+                <input type="file" class="pet-image-input" accept="image/jpeg, image/png">
+                <button class="upload-btn">Chọn ảnh</button>
+                <img class="image-preview pet-image-preview" src="" alt="Preview" />
+                <button class="remove-image-btn" style="margin-top: 10px;">Gỡ ảnh</button>
+            </div>
+            <div class="form-group">
+                <label for="ownerPhone">Số điện thoại chủ:</label>
+                <input type="text" class="owner-phone">
+            </div>
+            <div class="form-group">
+                <label for="ownerEmail">Email chủ:</label>
+                <input type="text" class="owner-email">
+            </div>
+            <button class="save-btn">Lưu thông tin</button>
+        </div>
+        <button class="add-btn">+</button>
+    </div>
+
+<script>
+    // Hàm lưu thông tin từ các biểu mẫu thú cưng vào Local Storage
+    function saveFormData() {
+// Lấy tất cả các form-container
+  const formContainers = document.querySelectorAll('.form-container');
+  const formDataList = [];
+
+  // Lặp qua từng form-container để lấy thông tin và thêm vào formDataList
+  formContainers.forEach(formContainer => {
+      const petCode = formContainer.querySelector('#petCode').value;
+      const petType = formContainer.querySelector('#petType').value;
+      const petNickname = formContainer.querySelector('#petNickname').value;
+      const petCharacteristics = formContainer.querySelector('#petCharacteristics').value;
+      const ownerPhone = formContainer.querySelector('#ownerPhone').value;
+      const ownerEmail = formContainer.querySelector('#ownerEmail').value;
+
+      // Thêm thông tin của biểu mẫu hiện tại vào formDataList
+      formDataList.push({
+          petCode: petCode,
+          petType: petType,
+          petNickname: petNickname,
+          petCharacteristics: petCharacteristics,
+          ownerPhone: ownerPhone,
+          ownerEmail: ownerEmail
+      });
+  });
+
+  // Kiểm tra formDataList trong console
+  console.log(formDataList);
+
+
+        localStorage.setItem('petForms', JSON.stringify(formDataList));
+    }
+
+    // Hàm load thông tin thú cưng từ Local Storage khi trang web được load lại
+    function loadPetInfo() {
+        const petForms = JSON.parse(localStorage.getItem('petForms')) || [];
+
+// Lặp qua mỗi petForm để tạo một formContainer và gán giá trị từ petForm vào đó
+    petForms.forEach(petForm => {
+        const formContainer = createFormContainer();
+        container.insertBefore(formContainer, document.querySelector('.add-btn'));
+
+        // Gán giá trị từ petForm vào các trường tương ứng trong formContainer
+        formContainer.querySelector('#petCode').value = petForm.petCode;
+        formContainer.querySelector('#petType').value = petForm.petType;
+        formContainer.querySelector('#petNickname').value = petForm.petNickname;
+        formContainer.querySelector('#petCharacteristics').value = petForm.petCharacteristics;
+        formContainer.querySelector('#ownerPhone').value = petForm.ownerPhone;
+        formContainer.querySelector('#ownerEmail').value = petForm.ownerEmail;
+    });
+
+    }
+
+    // Tạo một form container mới
+    function createFormContainer() {
+        const formContainer = document.createElement('div');
+        formContainer.classList.add('form-container');
+        formContainer.innerHTML = `
+            <h2>Thông tin thú cưng</h2>
+            <div class="form-group">
+                <label for="petCode">Mã thú cưng:</label>
+                <input type="text" class="pet-code">
+            </div>
+            <div class="form-group">
+                <label for="petType">Loại thú cưng:</label>
+                <input type="text" class="pet-type">
+            </div>
+            <div class="form-group">
+                <label for="petNickname">Nickname:</label>
+                <input type="text" class="pet-nickname">
+            </div>
+            <div class="form-group">
+                <label for="petCharacteristics">Đặc điểm nhận biết:</label>
+                <input type="text" class="pet-characteristics">
+            </div>
+            <div class="form-group">
+                <label for="petImage">Hình ảnh:</label>
+                <input type="file" class="pet-image-input" accept="image/jpeg, image/png">
+                <button class="upload-btn">Chọn ảnh</button>
+                <img class="image-preview pet-image-preview" src="" alt="Preview" />
+                <button class="remove-image-btn" style="margin-top: 10px;">Gỡ ảnh</button>
+            </div>
+            <div class="form-group">
+                <label for="ownerPhone">Số điện thoại chủ:</label>
+                <input type="text" class="owner-phone">
+            </div>
+            <div class="form-group">
+                <label for="ownerEmail">Email chủ:</label>
+                <input type="text" class="owner-email">
+            </div>
+            <button class="save-btn">Lưu thông tin</button>
+        `;
+        return formContainer;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.querySelector('.container');
+
+        // Gọi hàm loadPetInfo khi trang web được load lại
+        loadPetInfo();
+
+        container.addEventListener('click', function(event) {
+            if (event.target.classList.contains('upload-btn')) {
+                event.target.parentElement.querySelector('.pet-image-input').click();
+            }
+
+            if (event.target.classList.contains('remove-image-btn')) {
+                const imagePreview = event.target.parentElement.querySelector('.image-preview');
+                imagePreview.src = '';
+            }
+
+            if (event.target.classList.contains('save-btn')) {
+                alert('Lưu thành công!');
+                saveFormData();
+            }
+
+            if (event.target.classList.contains('add-btn')) {
+                const formContainer = createFormContainer();
+                container.insertBefore(formContainer, event.target);
+            }
+        });
+
+        container.addEventListener('change', function(event) {
+            if (event.target.classList.contains('pet-image-input')) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                const imagePreview = event.target.parentElement.querySelector('.image-preview');
+
+                reader.onload = function() {
+                    imagePreview.src = reader.result;
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
