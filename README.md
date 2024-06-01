@@ -1,7 +1,8 @@
 # WebProject
-Petopia - Thiên đường cho thú cưng - web quản lý thú cưng
-Có những giao diện như: trang chủ, đăng nhập, liên hệ, đăng ký thông tin, đặt lịch, quản lý thú cưng, quản lý khách hàng, phản hồi...
-Trang web cung cấp giao diện dễ nhìn, khiến bạn chọn ra dịch vụ cần thiết dành cho thú cưng của mình.
+Petopia - Thiên đường cho thú cưng - Trang web quản lý thú cưng
+Trang web Petopia bao gồm các giao diện sau: Trang chủ, Đăng nhập, Liên hệ, Đăng ký thông tin, Đặt lịch, Đăng ký hồ sơ thú cưng, Quản lý khách hàng, Đánh giá... Mỗi giao diện đều được thiết kế trực quan và dễ sử dụng, nhằm mang lại trải nghiệm tốt nhất cho người dùng.
+Petopia cung cấp một giao diện thân thiện và dễ nhìn, giúp bạn dễ dàng tìm kiếm và chọn lựa dịch vụ phù hợp cho thú cưng của mình. Cho dù bạn cần đặt lịch hẹn với bác sĩ thú y, quản lý thông tin sức khỏe của thú cưng hay đơn giản là tìm kiếm các dịch vụ chăm sóc thú cưng, Petopia đều đáp ứng mọi nhu cầu của bạn.
+Với Petopia, việc chăm sóc thú cưng chưa bao giờ dễ dàng hơn thế. Hãy để chúng tôi giúp bạn mang lại cuộc sống tốt đẹp nhất cho những người bạn bốn chân thân yêu của mình.
 Chức năng trang web:
 - Khách hàng (Client web):
   + Đặt lịch hẹn
