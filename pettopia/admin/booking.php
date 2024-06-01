@@ -2,39 +2,36 @@
 include 'header.php';
 require_once 'connect.php';
 
-// Initialize $success và $error variables
 $success = '';
 $error = '';
 $error1 = '';
 
-// Calculate total pages
-$rows_per_page = 10; // Adjust as needed
+$rows_per_page = 10; 
 $total_rows = mysqli_num_rows(mysqli_query($conn, "SELECT IDbooking FROM booking"));
 $total_pages = ceil($total_rows / $rows_per_page);
 
-// Determine current page
+
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-// Calculate the starting row for the query
+
 $start_row = ($current_page - 1) * $rows_per_page;
 
-// Get bookings for the current page
 $sql = "SELECT IDbooking, time_arrival, phone_number, booking_status FROM booking LIMIT $start_row, $rows_per_page";
 $bookings = mysqli_query($conn, $sql);
 
-// Handle appointment actions
+
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $booking_id = $_GET['IDbooking'];
 
     if ($action == 'delete') {
-        // Delete appointment
+
         $delete_sql = "DELETE FROM booking WHERE IDbooking='$booking_id'";
         mysqli_query($conn, $delete_sql);
         header("Location: booking.php?page=$current_page");
         exit();
     } elseif ($action == 'update') {
-        // Update appointment status
+  
         $status = $_GET['status'];
         $update_sql = "UPDATE booking SET booking_status='$status' WHERE IDbooking='$booking_id'";
         mysqli_query($conn, $update_sql);
@@ -43,27 +40,25 @@ if (isset($_GET['action'])) {
     }
 }
 
-// Handle form submission
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sanitize input data
+   
     $time_arrival = mysqli_real_escape_string($conn, $_POST['time_arrival']);
     $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
     $booking_status = mysqli_real_escape_string($conn, $_POST['booking_status']);
 
-    // Kiểm tra xem thời gian đến có lớn hơn thời gian hiện tại + 5 giờ không
+ 
     $currentTime = time();
-    $fiveHoursLater = $currentTime ; // 5 giờ sau bỏ + (5 * 3600)
+    $fiveHoursLater = $currentTime + 11*3600; 
     $timeArrivalTimestamp = strtotime($time_arrival);
 
     if ($timeArrivalTimestamp <= $fiveHoursLater) {
         $error = 'Thời gian đến phải lớn hơn thời gian hiện tại';
     } else {
-        // Kiểm tra số điện thoại trong bảng "customer"
         $customer_query = "SELECT * FROM customer WHERE PhoneNumber = '$phone_number'";
         $customer_result = mysqli_query($conn, $customer_query);
 
         if (mysqli_num_rows($customer_result) > 0) {
-            // Insert the new booking into the database
             $sql = "INSERT INTO booking (time_arrival, phone_number, booking_status) 
                     VALUES ('$time_arrival', '$phone_number', '$booking_status')";
 
@@ -90,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         .error-message {
             color: red;
             font-size: 1em;
-            display: block; /* Ensure it is displayed initially */
+            display: block; 
         }
         .phan-trang {
             width: 100%;
@@ -122,7 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
 
         <?php
-        // Display appointments
         if (mysqli_num_rows($bookings) > 0) {
         ?>
             <table class="table table-bordered table-hover">
@@ -146,7 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <td><?php echo $row['booking_status']; ?></td>
                             <td>
                                 <?php
-                                // Check if appointment status is not 'Đã đến'
                                 if ($row['booking_status'] != 'Đã đến') {
                                 ?>
                                    <a href="booking.php?page=<?php echo $current_page; ?>&action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Hủy" class="btn btn-xs btn-warning">Hủy</a>
@@ -229,11 +222,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         if (!isValidPhone) {
                             phoneError.textContent = "Số điện thoại chỉ được chứa các chữ số từ 0 đến 9.";
                             phoneError.style.display = 'block';
-                            event.preventDefault(); // Prevent form submission
+                            event.preventDefault(); 
                         } else if (phoneValue.length !== 10) {
                             phoneError.textContent = "Số điện thoại phải có đủ 10 số.";
                             phoneError.style.display = 'block';
-                            event.preventDefault(); // Prevent form submission
+                            event.preventDefault(); 
                         } else {
                             phoneError.style.display = 'none';
                         }
