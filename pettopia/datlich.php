@@ -2,30 +2,24 @@
 include 'dieuhuong.php';
 require_once 'ketnoi.php';
 
-// Initialize $success và $error variables
 $success = '';
 $error = '';
 $error1 ='';
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sanitize input data
     $time_arrival = mysqli_real_escape_string($conn, $_POST['time_arrival']);
     $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
 
-    // Kiểm tra xem thời gian đến có lớn hơn thời gian hiện tại + 5 giờ không
     $currentTime = time();
-    $fiveHoursLater = $currentTime + (5 * 3600); // 5 giờ sau
+    $fiveHoursLater = $currentTime + 11*3600 ; 
     $timeArrivalTimestamp = strtotime($time_arrival);
 
     if ($timeArrivalTimestamp <= $fiveHoursLater) {
         $error = 'Thời gian đến phải lớn hơn thời gian hiện tại';
     } else {
-        // Kiểm tra số điện thoại trong bảng "customer"
         $customer_query = "SELECT * FROM customer WHERE PhoneNumber = '$phone_number'";
         $customer_result = mysqli_query($conn, $customer_query);
 
         if (mysqli_num_rows($customer_result) > 0) {
-            // Insert the new booking into the database
             $sql = "INSERT INTO booking (time_arrival, phone_number, booking_status) 
                     VALUES ('$time_arrival', '$phone_number', 'Đợi')";
             
@@ -35,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit();
             } else {
                 $error = 'Có lỗi khi thêm mới đặt phòng: ' . mysqli_error($conn);
-                // Hiển thị hoặc ghi log thông báo lỗi
             }
         } else {
             $error1 = 'Số điện thoại này chưa được đăng ký';
@@ -50,7 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Quản lý Đặt phòng</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-   
     <style>
         .error-message {
             color: red;
@@ -110,11 +102,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (!isValidPhone) {
                 phoneError.textContent = "Số điện thoại chỉ được chứa các chữ số từ 0 đến 9.";
                 phoneError.style.display = 'block';
-                event.preventDefault(); // Ngăn chặn việc gửi biểu mẫu
+                event.preventDefault(); 
             } else if (phoneValue.length !== 10) {
                 phoneError.textContent = "Số điện thoại phải có đủ 10 số.";
                 phoneError.style.display = 'block';
-                event.preventDefault(); // Ngăn chặn việc gửi biểu mẫu
+                event.preventDefault(); 
             } else {
                 phoneError.style.display = 'none';
             }
@@ -132,6 +124,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         });
     });
 </script>
+
+                <!-- <div class="form-group">
+                    <label for="booking_status">Trạng thái đặt phòng</label>
+                    <select name="booking_status" id="booking_status" class="form-control">
+                        <option value="Đã đến">Đã đến</option>
+                        <option value="Đợi">Đợi</option>
+                        <option value="Hủy">Hủy</option>
+                    </select>
+                </div> -->
                 <button type="submit" class="btn btn-primary">Lưu lại</button>
             </form>
             <?php if ($success): ?>
