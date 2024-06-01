@@ -2,6 +2,11 @@
 ob_start();
 include_once 'dieuhuong.php';
 include_once 'ketnoi.php';
+
+$phoneError = '';
+$emailError = '';
+$dobError = '';
+
 if (
     isset($_POST['dangky']) &&
     isset($_POST['name']) && $_POST['name'] != '' &&
@@ -16,59 +21,67 @@ if (
     $phone = $_POST['phone'];
     $email = $_POST['email'];
 
-    // Prepared statement to prevent SQL injection
-    // Check if phone number or email already exists
-    $check_sql = "SELECT * FROM `customer` WHERE `PhoneNumber` = ? OR `email` = ?";
-    $check_stmt = $conn->prepare($check_sql);
-    $check_stmt->bind_param("ss", $phone, $email);
-    $check_stmt->execute();
-    $result = $check_stmt->get_result();
+    // Convert the current time to a date without time part
+    $currentDate = date('Y-m-d');
+    $dobDate = date('Y-m-d', strtotime($date));
 
-    $phoneError = "";
-    $emailError = "";
+    if ($dobDate >= $currentDate) {
+        $dobError = 'Ngày sinh không được lớn hơn hoặc bằng ngày hiện tại';
+    } else {
+        // Prepared statement to prevent SQL injection
+        // Check if phone number or email already exists
+        $check_sql = "SELECT * FROM customer WHERE PhoneNumber = ? OR email = ?";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("ss", $phone, $email);
+        $check_stmt->execute();
+        $result = $check_stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            if ($row['PhoneNumber'] == $phone) {
-                $phoneError = "Số điện thoại này đã được đăng ký!";
+        $phoneError = "";
+        $emailError = "";
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                if ($row['PhoneNumber'] == $phone) {
+                    $phoneError = "Số điện thoại này đã được đăng ký!";
+                }
+                if ($row['email'] == $email) {
+                    $emailError = "Email này đã được đăng ký!";
+                }
             }
-            if ($row['email'] == $email) {
-                $emailError = "Email này đã được đăng ký!";
+        }
+
+        if ($phoneError == "" && $emailError == "") {
+            // If phone number and email are not already registered, proceed with registration
+            $sql = "INSERT INTO customer`(Name_customer`, DateOfBirth, Diachi, PhoneNumber, email) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssss", $name, $date, $diachi, $phone, $email);
+            $dk_sql = $stmt->execute();
+
+            if ($dk_sql) {
+                ob_start();
+                require_once 'footer.php';
+                $footer = ob_get_clean();
+                echo "<div style='color: #00008B; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>Đăng ký thông tin thành công!</strong></div>";
+                echo "<div class='duoi'>$footer</div>";
+            } else {
+                ob_start();
+                require_once 'footer.php';
+                $footer = ob_get_clean();
+                echo "<div style='color: red; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>Đăng ký thông tin thất bại!</strong></div>";
+                echo "<div class='duoi'>$footer</div>";
             }
         }
     }
 
-    if ($phoneError != "" || $emailError != "") {
+    if ($phoneError != "" || $emailError != "" || $dobError != "") {
         ob_start();
         require_once 'footer.php';
         $footer = ob_get_clean();
-        echo "<div style='color: red; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>$phoneError$emailError</strong></div>";
+        echo "<div style='color: red; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>$phoneError$emailError$dobError</strong></div>";
         echo "<div class='duoi'>$footer</div>";
-    } else {
-        // If phone number and email are not already registered, proceed with registration
-        $sql = "INSERT INTO `customer`(`Name_customer`, `DateOfBirth`, `Diachi`, `PhoneNumber`, `email`) VALUES 
-        (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssss", $name, $date, $diachi, $phone, $email);
-        $dk_sql = $stmt->execute();
-
-        if ($dk_sql) {
-            ob_start();
-            require_once 'footer.php';
-            $footer = ob_get_clean();
-            echo "<div style='color: #00008B; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>Đăng ký thông tin thành công!</strong></div>";
-            echo "<div class='duoi'>$footer</div>";
-        } else {
-            ob_start();
-            require_once 'footer.php';
-            $footer = ob_get_clean();
-            echo "<div style='color: red; font-size: 2.5em; text-align: center; margin-top: 20px; margin-bottom: 200px;'><strong>Đăng ký thông tin thất bại!</strong></div>";
-            echo "<div class='duoi'>$footer</div>";
-        }
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -160,6 +173,7 @@ if (
                 </div>
                 <div class="form-group">
                     <input type="date" name="date" id="date" class="form-control" required>
+                    <div class="error-message" id="dob-error">Ngày sinh không được lớn hơn hoặc bằng ngày hiện tại.</div>
                 </div>
                 <div class="form-group">
                     <input type="text" name="diachi" id="diachi" class="form-control" placeholder="Địa chỉ" required>
@@ -179,10 +193,28 @@ if (
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        var dateInput = document.getElementById('date');
+        var dobError = document.getElementById('dob-error');
         var phoneInput = document.getElementById('phone');
         var phoneError = document.getElementById('phone-error');
         var emailInput = document.getElementById('email');
         var emailError = document.getElementById('email-error');
+
+        dateInput.addEventListener('input', function() {
+            var dateValue = new Date(dateInput.value);
+            var currentDate = new Date();
+
+            // Reset time part of current date and date value to compare only date parts
+            currentDate.setHours(0, 0, 0, 0);
+            dateValue.setHours(0, 0, 0, 0);
+
+            if (dateValue >= currentDate) {
+                dobError.textContent = "Ngày sinh không được lớn hơn hoặc bằng ngày hiện tại.";
+                dobError.style.display = 'block';
+            } else {
+                dobError.style.display = 'none';
+            }
+        });
 
         phoneInput.addEventListener('input', function() {
             var phoneValue = phoneInput.value;
@@ -195,7 +227,7 @@ if (
             } else if (phoneValue === "") {
                 phoneError.style.display = 'none';
             } else if (!isPhoneNumberValidLength) {
-                phoneError.textContent = "Số điện thoại phải có đủ 10 số.";
+                phoneError.textContent = "Số điện thoại phải có 10 chữ số.";
                 phoneError.style.display = 'block';
             } else {
                 phoneError.style.display = 'none';
@@ -212,38 +244,8 @@ if (
                 emailError.style.display = 'none';
             }
         });
-
-        document.querySelector('form').addEventListener('submit', function(event) {
-            var phoneValue = phoneInput.value;
-            var emailValue = emailInput.value;
-            var isValidPhone = /^\d+$/.test(phoneValue);
-            var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
-
-            if (!isValidPhone) {
-                phoneError.textContent = "Số điện thoại chỉ được chứa các chữ số từ 0 đến 9.";
-                phoneError.style.display = 'block';
-                event.preventDefault(); // Prevent form submission
-            } else if (phoneValue.length !== 10) {
-                phoneError.textContent = "Số điện thoại phải có đủ 10 số.";
-                phoneError.style.display = 'block';
-                event.preventDefault(); // Prevent form submission
-            } else {
-                phoneError.style.display = 'none';
-            }
-
-            if (!isValidEmail) {
-                emailError.style.display = 'block';
-                event.preventDefault(); // Prevent form submission
-            } else {
-                emailError.style.display = 'none';
-            }
-        });
     });
-</script>
-
-    <div class="duoi">
-        <?php require_once 'footer.php' ?>
-    </div>
+    </script>
 </body>
 
 </html>
