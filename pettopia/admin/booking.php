@@ -2,6 +2,11 @@
 include 'header.php';
 require_once 'connect.php';
 
+// Initialize $success và $error variables
+$success = '';
+$error = '';
+$error1 = '';
+
 // Calculate total pages
 $rows_per_page = 10; // Adjust as needed
 $total_rows = mysqli_num_rows(mysqli_query($conn, "SELECT IDbooking FROM booking"));
@@ -45,16 +50,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
     $booking_status = mysqli_real_escape_string($conn, $_POST['booking_status']);
 
-    // Insert the new booking into the database
-    $sql = "INSERT INTO booking (time_arrival, phone_number, booking_status) 
-            VALUES ('$time_arrival', '$phone_number', '$booking_status')";
-    
-    if (mysqli_query($conn, $sql)) {
-        header("Location: booking.php?page=$current_page");
-        exit();
+    // Kiểm tra xem thời gian đến có lớn hơn thời gian hiện tại + 5 giờ không
+    $currentTime = time();
+    $fiveHoursLater = $currentTime ; // 5 giờ sau bỏ + (5 * 3600)
+    $timeArrivalTimestamp = strtotime($time_arrival);
+
+    if ($timeArrivalTimestamp <= $fiveHoursLater) {
+        $error = 'Thời gian đến phải lớn hơn thời gian hiện tại';
     } else {
-        $error = 'Có lỗi khi thêm mới đặt phòng: ' . mysqli_error($conn);
-        // Display or log the error message
+        // Kiểm tra số điện thoại trong bảng "customer"
+        $customer_query = "SELECT * FROM customer WHERE PhoneNumber = '$phone_number'";
+        $customer_result = mysqli_query($conn, $customer_query);
+
+        if (mysqli_num_rows($customer_result) > 0) {
+            // Insert the new booking into the database
+            $sql = "INSERT INTO booking (time_arrival, phone_number, booking_status) 
+                    VALUES ('$time_arrival', '$phone_number', '$booking_status')";
+
+            if (mysqli_query($conn, $sql)) {
+                $success = 'Đặt phòng thành công!';
+                header("Location: booking.php?page=$current_page");
+                exit();
+            } else {
+                $error = 'Có lỗi khi thêm mới đặt phòng: ' . mysqli_error($conn);
+            }
+        } else {
+            $error1 = 'Số điện thoại này chưa được đăng ký';
+        }
     }
 }
 ?>
@@ -63,34 +85,40 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý đặt hẹn</title>
-    <!-- Thêm bất kỳ CSS cần thiết nào ở đây -->
+    <title>Quản lý Đặt lịch</title>
     <style>
-    .phan-trang {
-        width: 100%;
-        text-align: center;
-        list-style: none;
-        font-weight: bold;
-        font-size: 1.5em;
-        overflow: hidden;
-        margin-bottom: 10px;
-    }
-
-    .phan-trang li {
-        display: inline;
-    }
-
-    .phan-trang a {
-        padding: 10px;
-        border: 1px solid #ebebeb;
-        text-decoration: none;
-    }
-</style>
+        .error-message {
+            color: red;
+            font-size: 1em;
+            display: block; /* Ensure it is displayed initially */
+        }
+        .phan-trang {
+            width: 100%;
+            text-align: center;
+            list-style: none;
+            font-weight: bold;
+            font-size: 1.5em;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .phan-trang li {
+            display: inline;
+        }
+        .phan-trang a {
+            padding: 10px;
+            border: 1px solid #ebebeb;
+            text-decoration: none;
+        }
+        .phan-trang a.active {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Danh sách lịch hẹn </h3>
+            <h3 class="panel-title">Danh sách lịch hẹn</h3>
         </div>
 
         <?php
@@ -100,10 +128,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>ID đặt hẹn</th>
+                        <th>ID đặt lịch</th>
                         <th>Thời gian đến</th>
                         <th>Số điện thoại</th>
-                        <th>Trạng thái </th>
+                        <th>Trạng thái lịch hẹn</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -121,9 +149,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 // Check if appointment status is not 'Đã đến'
                                 if ($row['booking_status'] != 'Đã đến') {
                                 ?>
-                                    <a href="booking.php?action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Hủy" class="btn btn-xs btn-warning">Hủy</a>
-                                    <a href="booking.php?action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Đã đến" class="btn btn-xs btn-success">Đến</a>
-                                    <a href="booking.php?action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Đợi" class="btn btn-xs btn-info">Đợi</a>
+                                   <a href="booking.php?page=<?php echo $current_page; ?>&action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Hủy" class="btn btn-xs btn-warning">Hủy</a>
+                                   <a href="booking.php?page=<?php echo $current_page; ?>&action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Đợi" class="btn btn-xs btn-info">Đợi</a>
+                                   <a href="booking.php?page=<?php echo $current_page; ?>&action=update&IDbooking=<?php echo $row['IDbooking']; ?>&status=Đã đến" class="btn btn-xs btn-success">Đến</a>
                                 <?php
                                 }
                                 ?>
@@ -137,10 +165,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <ul class="phan-trang">
             <?php
             for ($i = 1; $i <= $total_pages; $i++) {
-                echo "<li><a href='?page=" . $i . "'>" . $i . "</a></li>";
+                if ($i == $current_page) {
+                    echo "<li><a href='?page=" . $i . "' class='active'>" . $i . "</a></li>";
+                } else {
+                    echo "<li><a href='?page=" . $i . "'>" . $i . "</a></li>";
+                }
             }
             ?>
-        </ul>
+            </ul>
         <?php } else {
             echo "<p>Không có cuộc hẹn nào.</p>";
         } ?>
@@ -154,28 +186,91 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <form action="" method="POST" role="form">
                 <div class="form-group">
                     <label for="time_arrival">Thời gian đến</label>
-                    <input type="datetime-local" class="form-control" name="time_arrival" id="time_arrival">
+                    <input type="datetime-local" class="form-control" name="time_arrival" id="time_arrival" required>
+                    <?php if ($error): ?>
+                    <div class="error-message"><?php echo $error; ?></div>
+                    <?php endif; ?>
                 </div>
                 <div class="form-group">
                     <label for="phone_number">Số điện thoại</label>
-                    <input type="text" class="form-control" name="phone_number" id="phone_number">
+                    <input type="text" class="form-control" name="phone_number" id="phone" placeholder="Nhập số điện thoại" required pattern="\d{10}">
+                    <div style="color: red; font-size: 1em; display: none;" id="phone-error"></div>
+                    <?php if ($error1): ?>
+                    <div class="error-message"><?php echo $error1; ?></div>
+                    <?php endif; ?>
                 </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var phoneInput = document.getElementById('phone');
+                    var phoneError = document.getElementById('phone-error');
+
+                    phoneInput.addEventListener('input', function() {
+                        var phoneValue = phoneInput.value;
+                        var isValidPhone = /^\d*$/.test(phoneValue); 
+                        var isPhoneNumberValidLength = phoneValue.length === 10;
+
+                        if (!isValidPhone && phoneValue !== "") {
+                            phoneError.textContent = "Số điện thoại chỉ được chứa các chữ số từ 0 đến 9.";
+                            phoneError.style.display = 'block';
+                        } else if (phoneValue === "") {
+                            phoneError.style.display = 'none';
+                        } else if (!isPhoneNumberValidLength) {
+                            phoneError.textContent = "Số điện thoại phải có đủ 10 số.";
+                            phoneError.style.display = 'block';
+                        } else {
+                            phoneError.style.display = 'none';
+                        }
+                    });
+
+                    document.querySelector('form').addEventListener('submit', function(event) {
+                        var phoneValue = phoneInput.value;
+                        var isValidPhone = /^\d+$/.test(phoneValue);
+
+                        if (!isValidPhone) {
+                            phoneError.textContent = "Số điện thoại chỉ được chứa các chữ số từ 0 đến 9.";
+                            phoneError.style.display = 'block';
+                            event.preventDefault(); // Prevent form submission
+                        } else if (phoneValue.length !== 10) {
+                            phoneError.textContent = "Số điện thoại phải có đủ 10 số.";
+                            phoneError.style.display = 'block';
+                            event.preventDefault(); // Prevent form submission
+                        } else {
+                            phoneError.style.display = 'none';
+                        }
+                    });
+                });
+                </script>
                 <div class="form-group">
-                    <label for="booking_status">Trạng thái</label>
+                    <label for="booking_status">Trạng thái đặt phòng</label>
                     <select name="booking_status" id="booking_status" class="form-control">
-                        <option value="Đã đến">Đã đến</option>
                         <option value="Đợi">Đợi</option>
+                        <option value="Đã đến">Đã đến</option>
                         <option value="Hủy">Hủy</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                <button type="submit" class="btn btn-primary">Thêm</button>
             </form>
+            <?php if ($success): ?>
+                <div class="alert alert-success" role="alert">
+                    <?php echo $success; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
     <div class="duoi">
-            <?php require_once 'footer.php' ?>
-        </div>
+        <?php require_once 'footer.php' ?>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(function(errorMessage) {
+                errorMessage.style.display = 'block';
+                setTimeout(function() {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            });
+        });
+    </script>
 </body>
 </html>
-
-
