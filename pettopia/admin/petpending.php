@@ -98,7 +98,7 @@ $result = mysqli_query($conn, $sql);
 <body>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Danh sách thú cưng tại shop</h3>
+        <h3 class="panel-title">Danh sách thú cưng</h3>
     </div>
     <!-- Combo box for status selection -->
     <form action="" method="GET" style="margin-top:10px;margin-bottom:10px;">
