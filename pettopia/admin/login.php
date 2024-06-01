@@ -100,11 +100,25 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             color: #0056b3;
             text-decoration: underline;
         }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 40px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            color: #0056b3;
+        }
     </style>
 
 </head>
 
 <body>
+    <a href="../index.php" class="back-button"><i class="fas fa-arrow-left"></i></a>
     <div class="container">
         <div class="form-container">
             <form action="login.php" method="post">
