@@ -46,7 +46,7 @@ Bước 1: Mở phần mềm xampp đã tải về máy tính.
 Bước 2: Chọn “Start” ở Apache và MySQL
 Sau đó, chờ đến khi hai ứng dụng Apache và MySQL chuyển xanh.
 
-Bước 3: Mở trình duyệt web sau đó nhập địa chỉ https://localhost
+Bước 3: Mở trình duyệt web sau đó nhập địa chỉ https://localhost .
 Lúc này, ta sẽ thấy màn hình hiện lên giao diện của Xampp. Điều này chứng tỏ ta đã tạo thành công localhost trên máy tính có địa chỉ là https://localhost. Localhost này được điều hành bởi phần mềm Xampp.
 Sau đó, ta có thể sử dụng Localhost như bình thường. Ứng dụng nó trong việc lưu trữ thông tin website.
 
